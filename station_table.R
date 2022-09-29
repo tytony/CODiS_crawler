@@ -147,3 +147,22 @@ codis_stn_year = function(sid, start.YYYY, end.YYYY, rm.naCol = T){
   return(stndata)
 }
 
+# S. 測站清單 ----
+codis_stnInfo = function(){
+  
+  res = content(GET(url = "https://codis.cwb.gov.tw/api/station_list"),
+                type = "application/json", simplifyVector = T)
+  
+  stnInfo = do.call(rbind, res$data$item)
+  
+  for (i in c("altitude", "longitude", "latitude")){
+    stnInfo[,i] = as.numeric(stnInfo[,i])
+  }
+  
+  for (i in c("dataStartDate", "stationStartDate", "stationEndDate")){
+    stnInfo[,i] = ymd(stnInfo[,i], tz = "Asia/Taipei")
+  }
+  
+  return(stnInfo)
+}
+
