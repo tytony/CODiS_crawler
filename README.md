@@ -18,3 +18,11 @@
 -   start.YYYYMMDD－ 起始時間（西元YYYY年MM月DD日）
 -   end.YYYYMMDD－ 結束時間（西元YYYY年MM月DD日）
 -   rm.naCol－ 若為True，移除全部為NA之欄位
+
+## Examples
+
+-  codis_stn_day("466920", 20220101, 20220102)
+
+-  codis_stn_month("466920", 202201, 202202)
+
+-  codis_stn_year("466920", 2021, 2022)

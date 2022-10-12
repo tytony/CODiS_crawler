@@ -159,7 +159,7 @@ codis_stnInfo = function(){
     stnInfo[,i] = as.numeric(stnInfo[,i])
   }
   
-  for (i in c("dataStartDate", "stationStartDate", "stationEndDate")){
+  for (i in c("stationStartDate", "stationEndDate")){
     stnInfo[,i] = ymd(stnInfo[,i], tz = "Asia/Taipei")
   }
   
