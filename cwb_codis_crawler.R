@@ -9,6 +9,12 @@ codis_stn_day = function(sid, start.YYYYMMDD, end.YYYYMMDD, rm.naCol = T){
   DT.start = ymd(start.YYYYMMDD)
   DT.end = ymd(end.YYYYMMDD)
   
+  sid.head = substr(sid, 1, 2)
+  if (sid.head %in% c("46", "47")){stnType = "cwb"
+  } else if (sid.head %in% c("C0")){stnType = "auto_c0"
+  } else if (sid.head %in% c("C1")){stnType = "auto_c1"
+  } else {stnType = "agr"}
+  
   stndata = lapply(seq.Date(DT.start, DT.end, by = 1), function(DT){
     
     res = content(POST(url = "https://codis.cwb.gov.tw/api/station",
@@ -16,6 +22,7 @@ codis_stn_day = function(sid, start.YYYYMMDD, end.YYYYMMDD, rm.naCol = T){
                          "date" = "2022-05-01T00:00:00.000+08:00",
                          "type" = "table_date",
                          "stn_ID" = sid,
+                         "stn_type" = stnType,
                          "start" = paste0(DT, "T00:00:00"),
                          "end" = paste0(DT, "T23:59:59"))),
                   type = "application/json", simplifyVector = T)
@@ -32,6 +39,8 @@ codis_stn_day = function(sid, start.YYYYMMDD, end.YYYYMMDD, rm.naCol = T){
       names(tmp.df) = paste(names(stndata.tmp)[idx], names(tmp.df), sep = "_")
       stndata.ret = cbind(stndata.ret, tmp.df)
     }
+    
+    print(sprintf("processing... %s-%s", sid, DT))
     
     return(stndata.ret)
   })
@@ -55,14 +64,21 @@ codis_stn_month = function(sid, start.YYYYMM, end.YYYYMM, rm.naCol = T){
   DT.start = ym(start.YYYYMM)
   DT.end = ym(end.YYYYMM)
   
+  sid.head = substr(sid, 1, 2)
+  if (sid.head %in% c("46", "47")){stnType = "cwb"
+  } else if (sid.head %in% c("C0")){stnType = "auto_c0"
+  } else if (sid.head %in% c("C1")){stnType = "auto_c1"
+  } else {stnType = "agr"}
+  
   stndata = lapply(seq.Date(DT.start, DT.end, by = "1 month"), function(DT){
-    
+
     res = content(POST(url = "https://codis.cwb.gov.tw/api/station",
                        body = list(
                          "date" = "2022-05-01T00:00:00.000+08:00",
                          "type" = "table_month",
                          "stn_ID" = sid,
                          "start" = paste0(DT, "T00:00:00"),
+                         "stn_type" = stnType,
                          "end" = paste0(DT + months(1) - days(1), "T00:00:00"))),
                   type = "application/json", simplifyVector = T)
     
@@ -78,6 +94,8 @@ codis_stn_month = function(sid, start.YYYYMM, end.YYYYMM, rm.naCol = T){
       names(tmp.df) = paste(names(stndata.tmp)[idx], names(tmp.df), sep = "_")
       stndata.ret = cbind(stndata.ret, tmp.df)
     }
+    
+    print(sprintf("processing... %s-%s", sid, DT))
     
     return(stndata.ret)
   })
@@ -105,6 +123,12 @@ codis_stn_year = function(sid, start.YYYY, end.YYYY, rm.naCol = T){
   DT.start = ymd(paste0(start.YYYY, "-01-01"))
   DT.end = ymd(paste0(end.YYYY, "-12-31"))
   
+  sid.head = substr(sid, 1, 2)
+  if (sid.head %in% c("46", "47")){stnType = "cwb"
+  } else if (sid.head %in% c("C0")){stnType = "auto_c0"
+  } else if (sid.head %in% c("C1")){stnType = "auto_c1"
+  } else {stnType = "agr"}
+  
   stndata = lapply(seq.Date(DT.start, DT.end, by = "1 year"), function(DT){
     
     res = content(POST(url = "https://codis.cwb.gov.tw/api/station",
@@ -112,6 +136,7 @@ codis_stn_year = function(sid, start.YYYY, end.YYYY, rm.naCol = T){
                          "date" = "2022-05-01T00:00:00.000+08:00",
                          "type" = "table_year",
                          "stn_ID" = sid,
+                         "stn_type" = stnType,
                          "start" = paste0(DT, "T00:00:00"),
                          "end" = paste0(DT + years(1) - days(1), "T00:00:00"))),
                   type = "application/json", simplifyVector = T)
@@ -143,6 +168,8 @@ codis_stn_year = function(sid, start.YYYY, end.YYYY, rm.naCol = T){
   }
   
   if (rm.naCol){stndata[which(colSums(is.na(stndata)) == nrow(stndata))] = NULL}
+  
+  print(sprintf("processing... %s-%s", sid, DT))
   
   return(stndata)
 }
