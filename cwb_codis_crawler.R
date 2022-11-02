@@ -154,6 +154,8 @@ codis_stn_year = function(sid, start.YYYY, end.YYYY, rm.naCol = T){
       stndata.ret = cbind(stndata.ret, tmp.df)
     }
     
+    print(sprintf("processing... %s-%s", sid, DT))
+    
     return(stndata.ret)
   })
   
@@ -168,8 +170,6 @@ codis_stn_year = function(sid, start.YYYY, end.YYYY, rm.naCol = T){
   }
   
   if (rm.naCol){stndata[which(colSums(is.na(stndata)) == nrow(stndata))] = NULL}
-  
-  print(sprintf("processing... %s-%s", sid, DT))
   
   return(stndata)
 }
