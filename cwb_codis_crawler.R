@@ -11,15 +11,15 @@ codis_stn_day = function(sid, start.YYYYMMDD, end.YYYYMMDD, rm.naCol = T){
   
   sid.head = substr(sid, 1, 2)
   if (sid.head %in% c("46", "47")){stnType = "cwb"
-  } else if (sid.head %in% c("C0")){stnType = "auto_c0"
-  } else if (sid.head %in% c("C1")){stnType = "auto_c1"
+  } else if (sid.head %in% c("C0")){stnType = "auto_C0"
+  } else if (sid.head %in% c("C1")){stnType = "auto_C1"
   } else {stnType = "agr"}
   
   stndata = lapply(seq.Date(DT.start, DT.end, by = 1), function(DT){
-    
-    res = content(POST(url = "https://codis.cwb.gov.tw/api/station",
+ 
+    res = content(POST(url = "https://codis.cwb.gov.tw/api/station?",
                        body = list(
-                         "date" = "2022-05-01T00:00:00.000+08:00",
+                         "date" = paste0(DT, "T00:00:00.000+08:00"),
                          "type" = "table_date",
                          "stn_ID" = sid,
                          "stn_type" = stnType,
@@ -66,8 +66,8 @@ codis_stn_month = function(sid, start.YYYYMM, end.YYYYMM, rm.naCol = T){
   
   sid.head = substr(sid, 1, 2)
   if (sid.head %in% c("46", "47")){stnType = "cwb"
-  } else if (sid.head %in% c("C0")){stnType = "auto_c0"
-  } else if (sid.head %in% c("C1")){stnType = "auto_c1"
+  } else if (sid.head %in% c("C0")){stnType = "auto_C0"
+  } else if (sid.head %in% c("C1")){stnType = "auto_C1"
   } else {stnType = "agr"}
   
   stndata = lapply(seq.Date(DT.start, DT.end, by = "1 month"), function(DT){
@@ -125,8 +125,8 @@ codis_stn_year = function(sid, start.YYYY, end.YYYY, rm.naCol = T){
   
   sid.head = substr(sid, 1, 2)
   if (sid.head %in% c("46", "47")){stnType = "cwb"
-  } else if (sid.head %in% c("C0")){stnType = "auto_c0"
-  } else if (sid.head %in% c("C1")){stnType = "auto_c1"
+  } else if (sid.head %in% c("C0")){stnType = "auto_C0"
+  } else if (sid.head %in% c("C1")){stnType = "auto_C1"
   } else {stnType = "agr"}
   
   stndata = lapply(seq.Date(DT.start, DT.end, by = "1 year"), function(DT){
