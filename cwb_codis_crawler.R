@@ -1,4 +1,4 @@
-# CWB CODIS 氣候資料服務系統爬蟲
+# CWA CODIS 氣候資料服務系統爬蟲
 
 library(httr)
 library(lubridate)
@@ -17,7 +17,7 @@ codis_stn_day = function(sid, start.YYYYMMDD, end.YYYYMMDD, rm.naCol = T){
   
   stndata = lapply(seq.Date(DT.start, DT.end, by = 1), function(DT){
  
-    res = content(POST(url = "https://codis.cwb.gov.tw/api/station?",
+    res = content(POST(url = "https://codis.cwa.gov.tw/api/station?",
                        body = list(
                          "date" = paste0(DT, "T00:00:00.000+08:00"),
                          "type" = "table_date",
@@ -72,7 +72,7 @@ codis_stn_month = function(sid, start.YYYYMM, end.YYYYMM, rm.naCol = T){
   
   stndata = lapply(seq.Date(DT.start, DT.end, by = "1 month"), function(DT){
 
-    res = content(POST(url = "https://codis.cwb.gov.tw/api/station",
+    res = content(POST(url = "https://codis.cwa.gov.tw/api/station",
                        body = list(
                          "date" = "2022-05-01T00:00:00.000+08:00",
                          "type" = "table_month",
@@ -131,7 +131,7 @@ codis_stn_year = function(sid, start.YYYY, end.YYYY, rm.naCol = T){
   
   stndata = lapply(seq.Date(DT.start, DT.end, by = "1 year"), function(DT){
     
-    res = content(POST(url = "https://codis.cwb.gov.tw/api/station",
+    res = content(POST(url = "https://codis.cwa.gov.tw/api/station",
                        body = list(
                          "date" = "2022-05-01T00:00:00.000+08:00",
                          "type" = "table_year",
@@ -177,7 +177,7 @@ codis_stn_year = function(sid, start.YYYY, end.YYYY, rm.naCol = T){
 # S. 測站清單 ----
 codis_stnInfo = function(){
   
-  res = content(GET(url = "https://codis.cwb.gov.tw/api/station_list"),
+  res = content(GET(url = "https://codis.cwa.gov.tw/api/station_list"),
                 type = "application/json", simplifyVector = T)
   
   stnInfo = do.call(rbind, res$data$item)
